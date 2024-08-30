@@ -58,10 +58,10 @@ function About() {
   return (
     <Layout>
       <Helmet>
-        <title>About - Chester React Personal Portfolio Template</title>
+        <title>About - Dario Velez Portfolio</title>
         <meta
           name="description"
-          content="Chester React Personal Portfolio Template About Page"
+          content="About Page"
         />
       </Helmet>
       <Suspense fallback={<Spinner />}>
@@ -98,9 +98,7 @@ function About() {
                     I am <span className="color-theme">{information.name}</span>
                   </h3>
                   <p>
-                    I am a frontend web developer. I can provide clean code and
-                    pixel perfect design. I also make website more & more
-                    interactive with web animations.
+                    With a strong foundation in both frontend and backend development, I have successfully contributed to numerous projects, showcasing my proficiency in technologies such as HTML, CSS, JavaScript, and various frontend frameworks. On the backend, I have expertise in server-side languages, databases, and server deployment. Additionally, my experience extends to mobile application development, where I have leveraged my skills to create robust and user-friendly applications. I have a proven track record of delivering high-quality software solutions, collaborating with cross-functional teams, and adapting to the dynamic landscape of technology. My commitment to staying updated with the latest industry trends and my problem-solving mindset make me a valuable asset in developing and optimizing software solutions to meet the ever-evolving needs of users and businesses.
                   </p>
                   <ul>
                     {!information.name ? null : (

@@ -1,10 +1,12 @@
 import axios from "axios";
-import React, { Suspense, useEffect, useState } from "react";
+import React, {Suspense, useCallback, useEffect, useState} from "react";
 import * as Icon from "react-feather";
 import { Helmet } from "react-helmet";
 import Layout from "../components/Layout";
 import Sectiontitle from "../components/Sectiontitle";
 import Spinner from "../components/Spinner";
+
+const sendContactMessageURL = `https://us-central1-polls-9acff.cloudfunctions.net/sendMail`;
 
 function Contact() {
   const [phoneNumbers, setPhoneNumbers] = useState([]);
@@ -19,7 +21,7 @@ function Contact() {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
     if (!formdata.name) {
       setError(true);
@@ -35,7 +37,18 @@ function Contact() {
       setMessage("Message is required");
     } else {
       setError(false);
-      setMessage("You message has been sent!!!");
+      const isSent = await onSendMessage();
+      if (isSent) {
+        setMessage('You message has been sent!!!');
+        setFormdata({
+          name: '',
+          email: '',
+          subject: '',
+          message: '',
+        });
+      } else {
+        setMessage('There was a problem, please try again!!!');
+      }
     }
   };
   const handleChange = (event) => {
@@ -59,6 +72,25 @@ function Contact() {
     }
   };
 
+  const onSendMessage = useCallback(async () => {
+    const request = axios.create({
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': true,
+      },
+    });
+    try {
+      const response = await request.post(sendContactMessageURL, { data: formdata });
+      if (!response.data.status) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.log(error.message);
+      return false;
+    }
+  }, [formdata]);
+
   useEffect(() => {
     axios.get("/api/contactinfo").then((response) => {
       setPhoneNumbers(response.data.phoneNumbers);
@@ -70,7 +102,7 @@ function Contact() {
   return (
     <Layout>
       <Helmet>
-        <title>Contact - Chester React Personal Portfolio Template</title>
+        <title>Contact - Dario Velez Portfolio</title>
         <meta
           name="description"
           content="Chester React Personal Portfolio Template Contact Page"
